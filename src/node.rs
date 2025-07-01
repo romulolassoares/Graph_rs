@@ -1,5 +1,5 @@
 use crate::edge::Edge;
-
+#[derive(Clone)]
 pub struct Node {
     id: i32,
     weight: f32,
