@@ -1,20 +1,20 @@
+use crate::file_reader::freader;
+
 mod edge;
-mod node;
+mod file_reader;
 mod graph;
+mod node;
 
 fn main() {
-    let mut graph = graph::Graph::new(30);
+    let filename = "data/graph_5.txt"; // Nome do arquivo com os dados do grafo
 
-    // Insert nodes explicitly (optional, insert_edge auto-inserts nodes if missing)
-    graph.insert_node(1, Some(1.0));
-    graph.insert_node(2, Some(2.0));
-    graph.insert_node(3, Some(3.0));
+    let graph = match freader(filename) {
+        Ok(graph) => graph,
+        Err(e) => {
+            eprintln!("Erro ao ler o arquivo: {}", e);
+            return;
+        }
+    };
 
-    // Insert edges (auto-inserts nodes if needed)
-    graph.insert_edge(1, 2, 5.0);
-    graph.insert_edge(2, 3, 3.5);
-    graph.insert_edge(1, 3, 1.2);
-
-    // Print the graph structure
     graph.print();
 }
