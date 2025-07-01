@@ -5,10 +5,10 @@ pub struct Edge {
 }
 
 impl Edge {
-    pub fn new(target_id: i32) -> Self {
+    pub fn new(target_id: i32, weight: Option<f32>) -> Self {
         Edge {
             target_id,
-            weight: 0.0,
+            weight: weight.unwrap_or(0.0),
         }
     }
 
