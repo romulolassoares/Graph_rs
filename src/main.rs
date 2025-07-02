@@ -16,5 +16,6 @@ fn main() {
         }
     };
 
-    graph.print();
+    graph.to_dot();
+//    graph.print();
 }

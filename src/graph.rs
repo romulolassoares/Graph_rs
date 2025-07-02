@@ -46,7 +46,7 @@ impl Graph {
         }
 
         if let Some(node) = self.get_node_mut(target) {
-            node.insert_edge(Edge::new(target, Some(weight)));
+            node.insert_edge(Edge::new(id, Some(weight)));
         }
         self.number_edges += 1
     }
@@ -67,4 +67,5 @@ impl Graph {
             println!("")
         }
     }
+
 }
