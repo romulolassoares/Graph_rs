@@ -1,18 +1,29 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+
 use crate::node::Node;
 use crate::edge::Edge;
+use std::fs::File;
+use std::io::Write;
 
 pub struct Graph {
     order: i32,
     number_edges: i32,
     nodes: Vec<Node>,
+    has_node_weight: bool,
+    has_edge_weight: bool,
+    is_directed: bool,
 }
 
 impl Graph {
-    pub fn new(order: i32) -> Self {
+    pub fn new(order: i32, has_node_weight: bool, has_edge_weight: bool, is_directed: bool) -> Self {
         Graph {
             order,
             number_edges: 0,
             nodes: Vec::new(),
+            has_node_weight,
+            has_edge_weight,
+            is_directed,
         }
     }
 
@@ -45,7 +56,7 @@ impl Graph {
             node.insert_edge(Edge::new(target, Some(weight)));
         }
 
-        if let Some(node) = self.get_node_mut(target) {
+        if !self.is_directed && let Some(node) = self.get_node_mut(target) {
             node.insert_edge(Edge::new(id, Some(weight)));
         }
         self.number_edges += 1
@@ -68,4 +79,42 @@ impl Graph {
         }
     }
 
+    pub fn to_dot(&self, filename: &str) -> std::io::Result<()> {
+        let mut dot_str = String::new();
+        let line_type: &str;
+
+        if self.is_directed {
+            line_type = "->"
+        } else {
+            line_type = "--"
+        }
+
+        dot_str = dot_str + "strict graph {\n";
+
+        if self.has_node_weight {
+            for node in self.nodes.iter() {
+                dot_str = dot_str + "    " + &node.get_id().to_string() + "[weight = " + &node.get_weight().to_string() + "]" + "\n";
+            }
+        }
+
+        for node in self.nodes.iter() {
+            for edge in node.get_edges() {
+                dot_str = dot_str + "   " + &node.get_id().to_string();
+
+                dot_str = dot_str + line_type + &edge.get_target_id().to_string();
+
+                if self.has_edge_weight{
+                    dot_str = dot_str + "[label=" + &edge.get_weight().to_string() + ", weight=" + &edge.get_weight().to_string() + "]";
+                }
+                dot_str = dot_str + "\n"
+            }
+        }
+
+        dot_str = dot_str + "}";
+
+        let mut file = File::create(filename)?;
+        file.write_all(dot_str.as_bytes())?;
+
+        Ok(())
+    }
 }
