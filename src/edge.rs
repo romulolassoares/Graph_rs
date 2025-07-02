@@ -1,4 +1,7 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
 #[derive(Clone)]
+
 pub struct Edge {
     target_id: i32,
     weight: f32,

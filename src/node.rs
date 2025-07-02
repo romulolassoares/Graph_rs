@@ -1,4 +1,8 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+
 use crate::edge::Edge;
+
 #[derive(Clone)]
 pub struct Node {
     id: i32,
